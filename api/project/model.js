@@ -16,7 +16,7 @@ async function getById(id) {
 	completed === 0 || !completed ? (completed = false) : (completed = true);
 	return { ...project, project_completed: completed };
 }
-//create some resources!
+//create some projects!
 async function create(project) {
 	const [id] = await proj('projects').insert(project);
 	return getById(id);

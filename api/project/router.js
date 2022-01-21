@@ -1,13 +1,27 @@
 // build your `/api/projects` router here
-const router = require('express').Router()
+const Project = require('./model');
+const router = require('express').Router();
 
-router.use((err,req, res, next) => { // eslint-disable-line
-    res.status(500).json({
-        customMessage: 'ruh roh, something went wrong inside of the project router.js file',
-        message: err.message,
-        stack: err.stack
-    })
-})
+//get everything from project table - id, name, description, completed
+router.get('/', (req, res) => {
+	Project.getAll()
+		.then((projects) => {
+			res.json(projects);
+		})
+		.catch((err) => {
+			res.status(500).json({ message: 'failed to retrieve projects', error: err.message });
+		});
+});
 
+//post a new project
+router.post('/', (req, res) => {
+	Project.create(req.body)
+		.then((newProject) => {
+			res.status(201).json(newProject);
+		})
+		.catch((err) => {
+			res.status(500).json({ message: 'Oops! Failed to create new project!', error: err.message });
+		});
+});
 
-module.exports = router
+module.exports = router;
